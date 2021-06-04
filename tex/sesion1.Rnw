@@ -1,0 +1,143 @@
+%Para poder compilar este archivo en knitr, tengo que abrirlo en UTF8!
+%API QUANDL : jBysYDAFzV-CwWy6zup_
+\PassOptionsToPackage{unicode,bookmarks=true}{hyperref} 
+\documentclass[9pt,aspectratio=169]{beamer} %handout para quitar las pausas
+\usepackage{mymacrosbeamer}
+\usepackage{graphicx}
+\usepackage{beamerthemesplit}
+\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{caption}
+\usepackage{multirow}
+
+%Beamer section
+\definecolor{miazul}{RGB}{0,102,204}
+\definecolor{miazulclaro}{RGB}{0,128,255}
+\definecolor{aleatorio}{RGB}{\Sexpr{sample(0:255,1)},\Sexpr{sample(0:255,1)},\Sexpr{sample(0:255,1)}} %sample(0:255,3,replace=T)
+\usecolortheme[named=aleatorio]{structure}
+\definecolor{links}{HTML}{2A1B81}
+\hypersetup{colorlinks,linkcolor=,urlcolor=links}
+\setbeamertemplate{navigation symbols}{}
+
+\usetheme{Madrid}
+%font specification section
+\usefonttheme{professionalfonts} % using non standard fonts for beamer
+\usefonttheme{serif} % default family is serif
+\usepackage{bookman}
+
+
+\usepackage{fontspec}   % Usar con lualatex
+%\usepackage[utf8]{inputenc}   % Usar con pdflatex
+\setmainfont[Path=/usr/share/fonts/truetype/dejavu/,
+BoldItalicFont=DejaVuSans-BoldOblique.ttf,
+BoldFont      =DejaVuSans-Bold.ttf,
+ItalicFont    =DejaVuSans-Oblique.ttf]{DejavuSans.ttf}
+
+%tikz section for draws
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usepackage{pgfplots} %para incluir gráficas con tikz
+\pgfplotsset{compat=1.16}
+\usetikzlibrary{shapes.geometric, arrows}
+
+\graphicspath{{Efigs/}}
+\DeclareGraphicsExtensions{.jpg,.png,.pdf,.eps,.ps}
+
+\decimalpoint
+
+% Estilos
+\theoremstyle{definition}
+\newtheorem{definicion}[theorem]{Definición}
+
+%Inserta un separador de sección
+\AtBeginSection[]{
+	\begin{frame}
+		\vfill
+		\centering
+		\begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+			\usebeamerfont{title}\insertsectionhead\par%
+		\end{beamercolorbox}
+		\vfill
+	\end{frame}
+}
+
+
+
+
+\title{{\tt Python} para finanzas}
+\subtitle{1. ¿Porqué Python para finanzas?}
+\author{Jorge de la Vega Góngora}
+\institute[GARSF]{Gerencia de Análisis de Riesgos del Sistema Financiero \\ DGEF}
+%\includegraphics[height=2cm,keepaspectratio]{caratulas/Escher1}}
+\date[11/06/21]{Sesión 1} % \today
+%\logo{\includegraphics[height=1.2cm,keepaspectratio]{logoitam}}  
+
+\newcommand{\python}{{\tt python}}
+
+\begin{document}
+\maketitle
+
+%\logo{} %para no incluir el logo en el resto de las páginas.
+
+<<setup, include=FALSE>>=
+library(knitr)
+opts_chunk$set(size='footnotesize',fig.path='figure/',comment=NULL)
+
+knit_hooks$set(rgl=function(before,options,envir){
+		if (!before){
+			if(rgl.cur()==0) return() #no active device
+			name = paste(options$fig.path,options$abel, sep="")
+			rgl.snapshot(paste(name,'.png',sep=""),fmt='png')
+			return(paste('\\includegraphics{',name,'}\n',sep=''))
+		}
+	}
+)
+@
+
+\section{\python: Introducción, instalación, configuración}
+
+\subsection{Introducción}
+
+\begin{frame}{¿Qué es \python?}
+ \begin{itemize}
+ 	\item \python\  es un lenguaje de programación de alto nivel creado a principios de los 90's por Guido van Rossum. Su nombre viene de la serie de TV de la BBC \emph{Monty Python's Flying Circus}. 
+ 	
+ 	\item Cuenta con las siguientes características:
+ 	\begin{itemize}
+ 		\item Es un intérprete: es un lenguaje con el que el usuario puede interactuar, como con {\tt R}, {\tt Matlab} o {\tt Julia}, en contraste con los lenguajes que deben ser compilados, como {\tt C}, {\tt Fortran} o {\tt Java}.
+ 		\item Es un programa orientado a objetos.
+ 		\item Incluye varias características de los lenguajes funcionales: 
+ 	\end{itemize}
+ 
+ 	\item Hubo dos versiones de \python que se estuvieron desarrollando durante un tiempo la versión 2.6 se lanzó en paralelo con la versión 3.0 y eran incompatibles. Sin embargo, las versiones 2 fueron ``descontinuadas'' a partir del 20 de abril de 2020.
+ 
+ 	\item La versión actual de \python\ es la versión 3.8.8 (Abril 2021). La familia 3 se desarrolló para corregir errores de diseño fundamentales en el lenguaje y que no podían tener compatibilidad inversa con la familia 2.  
+ \end{itemize}
+\end{frame}
+
+
+\subsection{Instalación}
+
+\begin{frame}{Instalación}
+Hay varias maneras de instalar \python. De hecho no hay un sólo \python, hay muchas variedades de \python's. 
+	\begin{itemize}
+		\item Solo y directo: no se recomienda, es un lío administrar los paquetes
+		\item Versión {\tt Anaconda}: fácil y sin problema.
+		\item Adicionalmente, hay varios IDEs para trabajar de manera interactiva con \python:
+		\begin{itemize}
+			\item {\tt Ipython} + editor de texto
+			\item {\tt Jupyter}
+			\item {\tt Spyder}
+			\item {\tt PyDev}
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\subsection{Configuración}
+
+\begin{frame}{Ambientes}
+	contenidos...
+\end{frame}
+
+\end{document}
