@@ -10,6 +10,9 @@
 \usepackage[spanish]{babel}
 \usepackage{caption}
 \usepackage{multirow}
+\usepackage{tikzsymbols}
+
+
 
 %Beamer section
 \definecolor{miazul}{RGB}{0,102,204}
@@ -26,6 +29,7 @@
 \usefonttheme{serif} % default family is serif
 \usepackage{bookman}
 
+%\setemojifont{NotoColorEmoji.ttf}[Path=/home/jvega/.fonts/]
 
 \usepackage{fontspec}   % Usar con lualatex
 %\usepackage[utf8]{inputenc}   % Usar con pdflatex
@@ -33,6 +37,7 @@
 BoldItalicFont=DejaVuSans-BoldOblique.ttf,
 BoldFont      =DejaVuSans-Bold.ttf,
 ItalicFont    =DejaVuSans-Oblique.ttf]{DejavuSans.ttf}
+%
 
 %tikz section for draws
 \usepackage{tikz}
@@ -63,8 +68,6 @@ ItalicFont    =DejaVuSans-Oblique.ttf]{DejavuSans.ttf}
 }
 
 
-
-
 \title{{\tt Python} para finanzas}
 \subtitle{1. ¿Porqué Python para finanzas?}
 \author{Jorge de la Vega Góngora}
@@ -74,7 +77,7 @@ ItalicFont    =DejaVuSans-Oblique.ttf]{DejavuSans.ttf}
 %\logo{\includegraphics[height=1.2cm,keepaspectratio]{logoitam}}  
 
 \newcommand{\python}{{\tt python}}
-
+\newcommand{\guindous}{Windows \Sey[][green!60!white]}
 \begin{document}
 \maketitle
 
@@ -82,6 +85,9 @@ ItalicFont    =DejaVuSans-Oblique.ttf]{DejavuSans.ttf}
 
 <<setup, include=FALSE>>=
 library(knitr)
+library(reticulate)
+use_python("/home/jvega/anaconda3/bin/python")
+
 opts_chunk$set(size='footnotesize',fig.path='figure/',comment=NULL)
 
 knit_hooks$set(rgl=function(before,options,envir){
@@ -101,13 +107,15 @@ knit_hooks$set(rgl=function(before,options,envir){
 
 \begin{frame}{¿Qué es \python?}
  \begin{itemize}
- 	\item \python\  es un lenguaje de programación de alto nivel creado a principios de los 90's por Guido van Rossum. Su nombre viene de la serie de TV de la BBC \emph{Monty Python's Flying Circus}. 
+ 	\item \python\ es un lenguaje de programación de alto nivel creado a principios de los 90's por el holandés Guido van Rossum. El nombre del programa viene de la serie de TV de la BBC \emph{Monty Python's Flying Circus}. 
  	
  	\item Cuenta con las siguientes características:
  	\begin{itemize}
- 		\item Es un intérprete: es un lenguaje con el que el usuario puede interactuar, como con {\tt R}, {\tt Matlab} o {\tt Julia}, en contraste con los lenguajes que deben ser compilados, como {\tt C}, {\tt Fortran} o {\tt Java}.
- 		\item Es un programa orientado a objetos.
- 		\item Incluye varias características de los lenguajes funcionales: 
+ 		\item Es un intérprete, con algunas partes compiladas: {\tt CPython} compila el código fuente  de \python\ a bytecode y en ese momento interpreta ese bytecode, ejecutándose sobre la marcha.
+ 		
+ 		\item Soporta diferentes paradigmas de programación: orientada a objetos y funcional.
+ 		
+ 		\item \python\ se puede usar en combinación con otros lenguajes e interactuar para ampliar las capacidades computacionales. 
  	\end{itemize}
  
  	\item Hubo dos versiones de \python que se estuvieron desarrollando durante un tiempo la versión 2.6 se lanzó en paralelo con la versión 3.0 y eran incompatibles. Sin embargo, las versiones 2 fueron ``descontinuadas'' a partir del 20 de abril de 2020.
@@ -119,25 +127,318 @@ knit_hooks$set(rgl=function(before,options,envir){
 
 \subsection{Instalación}
 
-\begin{frame}{Instalación}
-Hay varias maneras de instalar \python. De hecho no hay un sólo \python, hay muchas variedades de \python's. 
+\begin{frame}[allowframebreaks]{Instalación}
+\begin{itemize}
+	\item Hay varias maneras de instalar \python. De hecho no hay un sólo \python, hay muchas variedades y sabores de \python's: CPython, Jython, IronPython, PyPy (son máquinas virtuales).
+	
+	\vspace{0.1cm}
+	
+	\begin{columns}
+		\begin{column}{0.7\textwidth}
+			    \begin{center}
+				\begin{tabular}{|c|c|c|} \hline
+				Implementación & Máquina virtual  & Lenguaje compatible \\ \hline
+				{\tt CPython}  & {\tt CPython VM} & {\tt C} \\ \hline 
+				{\tt Jython}   & {\tt JVM}        & {\tt Java} \\ \hline
+				{\tt IronPython} & {\tt CLR}      & {\tt C\#} \\ \hline
+				{\tt Brython}   & Motor Javascript & JavaScript \\ \hline
+				{\tt RubyPython} & Ruby VM         & {\tt Ruby} \\ \hline 
+				\end{tabular}
+			    
+			    
+			    {\tiny Fuente: \href{https://www.toptal.com/python/por-que-hay-tantos-pythons}{¿porqué hay tantos pyhons?}}
+				\end{center}
+		\end{column}%%
+		\begin{column}{0.3\textwidth}
+			\includegraphics[height=2.5cm]{memenoentiendonada}
+		\end{column}
+	\end{columns}
+	\vspace{0.1cm}
+	
+	\item Al igual que \R, \python\ tiene un intérprete muy básico  y su funcionalidad se aumenta a través de \emph{bibliotecas} que necesitan instalarse de manera adicional y separada. 
+	
+	\item Aunque \python\ es multiplataforma, algunos paquetes no estándar tienen dependencias específicas del sistema operativo (aunque lo mismo pasa en \R ). 
+	
+	\item Puede ser muy enredoso y complicado mantener todos los paquetes y versiones y puede consumir mucho tiempo (eg: recompilar dependencias). En un ratito se puede hacer un batidillo el sistema de paquetes y sus actualizaciones. Es mejor dejar que algo o alguien lo haga por nosotros. Algunas de las herramientas que nos pueden ayudar son las siguientes:
+	
 	\begin{itemize}
-		\item Solo y directo: no se recomienda, es un lío administrar los paquetes
-		\item Versión {\tt Anaconda}: fácil y sin problema.
-		\item Adicionalmente, hay varios IDEs para trabajar de manera interactiva con \python:
+		\item {\bf Gestores de paquetes}: {\tt pip} y {\tt conda} ayudan con la instalación, actualización y eliminación de los paquetes, y llevan la gestión de las versiones.
+		
+		\item {\bf Gestores de ambientes}: {\tt virtualenv} y {\tt conda} permiten manejar diferentes instalaciones en paralelo sin que los paquetes de una versión se crucen entre si y haya conflictos.
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Opciones de instalación}
+Las opciones de instalación consideradas son las siguientes:
+
+\begin{itemize}
+	\item Solo y directo: no se recomienda, es un lío administrar los paquetes en cualquier sistema. Aunque en las versiones usuales de Linux ya viene instalado. 
+	
+	 Nivel de expertise:\textcolor{red}{{\bf alto}}.
+	 
+	\item Versión \href{https://www.anaconda.com/products/individual}{\tt Anaconda}: fácil y sin problema, la versión preferida si:
+	\begin{itemize}
+		\item Nuevo a conda o \python.
+		\item Gusta la conveniencia de tener \python\ y sobre 1,500 paquetes científicos automáticamente instalados de una sola vez. 
+		\item Se tiene espacio de disco: \~3G
+		\item No se quiere instalar individualmente cada paquete que se quiere usar.
+	\end{itemize}
+	 Nivel de expertise: \textcolor{olive}{{\bf bajo}}. 
+	
+	
+	\item Versión \href{https://docs.conda.io/en/latest/miniconda.html}{{\tt Miniconda}}: versión minimalista de \python\ con {\tt conda}. Disponible para \guindous, Mac, Linux. Opción preferida si:
+	\begin{itemize}
+		\item Se prefiere instalar cada paquete de manera individual
+		\item No se tiene el tiempo (10min) o el espacio para instalar cerca de 1,500 paquetes de golpe.
+		\item Se quiere un acceso rápido a \python\ y a los comandos de {\tt conda} y se desea arreglar los otros programas después.
+		\item No se requiere tener una versión muy actualizada. 
+	\end{itemize}
+	 Nivel de expertise:\textcolor{olive}{{\bf bajo}}.
+\end{itemize}
+
+Adicionalmente, hay varios IDEs para trabajar de manera interactiva con \python: {\tt Ipython} + editor de texto, {\tt Jupyter}, {\tt Spyder}, {\tt PyDev}, {\tt Atom}, etc.
+
+Yo preferí instalar {\tt Anaconda},  y prefiero {\tt Spyder} y {\tt Jupyter} como IDEs.
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]{Instalar con Anaconda}
+\begin{itemize}
+	\item En \guindous:
+
+	\begin{enumerate}
+		\item Ir a \href{https://www.anaconda.com/products/individual}{https://www.anaconda.com/products/individual}
+		\item Obtener el archivo del sistema operativo deseado. Pide registrase para poder obtener el archivo de instalación correspondiente. Se obtiene un archivo ejecutable y hay que seguir las instrucciones. 
+		\item Para verificar si quedó bien instalado, abrir la linea de comando de Anaconda (buscar con {\tt cmd}) y teclear
+		\begin{verbatim}
+			python
+		\end{verbatim}
+		\item Para salir del shell, teclear  {\tt Ctrl-Z} o {\tt exit()}. Si se usa la línea de comando del sistema, no funcionará el atajo.
+		\item También en la linea de comando se puede teclear {\tt Ipython} y se abrirá la versión interativa.
+	\end{enumerate}
+
+	\item En Mac:
+	
+	\begin{enumerate}
+		\item Obtener de \href{https://www.anaconda.com/products/individual}{https://www.anaconda.com/products/individual} el OS X installer.
+		\item Hacer doble click en el {\sl .pkg} para ejecutar el installer
+		\item Cuando el installer se ejecuta, pega la ruta del ejecutable al archivo {\sl .bash\_profile} que se encuentra en {\tt /Users/\$USER/.bash\_profile}.
+		\item Ejecutar {\tt ipython}. Para salir del shell, presionar {\tt Ctrl-D} o {\tt exit()}.
+	\end{enumerate}
+
+	\item En Linux: 
+	
+	\begin{enumerate}
+		\item Igual que en Mac, solo que en lugar de obtener {\sl .pk} se obtiene el {\sl .sh} y se ejecuta
+		\begin{verbatim}
+			bash Anaconda3-2021.05-Linux-x86_64.sh
+		\end{verbatim}
+	\end{enumerate}
+
+	\item En todos los casos, una vez instalado Anaconda, se puede llamar a 
+	\begin{verbatim}
+		Anaconda-Navigator
+	\end{verbatim} 
+    para actualizar, agregar o borrar paquetes instalados, crear nuevos ambientes e incluso instalar distribuciones de otros programas, 
+	\begin{columns}
+			\begin{column}{0.5\textwidth}
+			\begin{center}
+			\includegraphics[height=0.4\textheight]{AnacondaNavigator}
+			\end{center}
+			\end{column}%%
+			\begin{column}{0.5\textwidth}
+			\begin{center}
+			\includegraphics[height=0.4\textheight]{AnacondaNavigatorUpdate}
+			\end{center}
+		\end{column}
+	\end{columns}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Instalar con Miniconda}
+	\begin{enumerate}
+		\item En \guindous: usar el \href{https://docs.conda.io/en/latest/miniconda.html#windows-installers}{installer} correspondiente a la versión deseada. 
+		\item Usar el correspondiente para \href{https://docs.conda.io/en/latest/miniconda.html#mac-installers}{Mac}
+	\end{enumerate}
+Hilpisch muestra como instalar Miniconda en un contenedor de docker. En lo personal prefiero Anaconda.  
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]{Ambientes (environments)}
+	\begin{itemize}
+		\item Un \emph{ambiente virtual} es una copia de trabajo de \python\ con un nombre, aislada y que mantiene sus propios archivos, directorios y rutas, para trabajar con versiones específicas de los paquetes sin afectar otros proyectos de \python.
+		
+		\item Por ejemplo, consideren los siguientes ejemplos:
 		\begin{itemize}
-			\item {\tt Ipython} + editor de texto
-			\item {\tt Jupyter}
-			\item {\tt Spyder}
-			\item {\tt PyDev}
-		\end{itemize}
+			\item en mi laptop, cuando instalé {\tt Anaconda}, se creó un ambiente llamado {\tt base}.
+			\item Para hacer esta presentación, usé el paquete {\tt reticulate} de \R. El paquete creó un ambiente separado llamado {\tt r-reticulate}
+			\item Adicionalmente, tuve que crear un ambiente {\tt base2}, por problemas de instalación con el ambiente {\tt base} que se creó en la instalación original. 
+		\end{itemize} 
+	    \item Para crear un ambiente virtual de con nombre tuambiente:
+\begin{verbatim}
+conda create -n tuambiente python=x.x anaconda
+\end{verbatim}   
+         El comando anterior instalará la versión de \python\ indicada y todos los paqetes anaconda asociados en el directorio en {\tt tu\_anaconda3\_dir/env/tuambiente}. Por ejemplo en mi caso:
+         \begin{center}
+         	\includegraphics[height=3cm]{env1}
+         \end{center}
+     	\item Lista de los ambientes que están disponibles: {\tt conda info -e}
+     	
+     	\item Para activar o cambiarse a un ambiente virtual usar:
+\begin{verbatim}
+conda activate tuambiente
+\end{verbatim}
+     	Al activar un ambiente, se modifica el {\tt PATH} y las variables del shell hacia la estructura creada. Esto cambiará el prompt para mostrar el ambiente en el que se está en un momento determinado.
+     	\begin{center}
+     		\includegraphics[height=3cm]{env2}
+     	\end{center} 
+        \item Para terminar una sesión en el ambiente actual: {\tt conda deactivate}. Esto regresará al ambiente base, que también se puede desactivar con {\tt conda config --set auto\_activate\_base false}
 	\end{itemize}
 \end{frame}
 
+\begin{frame}[fragile, allowframebreaks]{Operaciones básicas con {\tt conda}}
+	\begin{itemize}
+		\item Instala \python\ x.x: {\tt conda install python=x.x}
+		\item Instala un paquete: {\tt conda install \$PAQUETE}
+		\item Actualiza un paquete: {\tt conda update \$PAQUETE}
+		\item Elimina un paquete: {\tt conda remove \$PAQUETE}
+		\item Buscar paquetes: {\tt conda search \$TERMINO\_A\_BUSCAR}
+	\end{itemize}
+\begin{center}
+	\includegraphics[height=5cm]{env3}
+\end{center}
+\end{frame}
+ 
 \subsection{Configuración}
 
-\begin{frame}{Ambientes}
-	contenidos...
+\begin{frame}{Bibliotecas o paquetes}
+	\begin{itemize}
+		\item El stack científico es uno de los principales atractivos de \python\ actualmente:
+		\begin{itemize}
+			\item \href{http://www.numpy.org}{{\tt Numpy}}: permite manejar arreglos de datos multidimensionales tanto homogéneos como heterogéneos y métodos/funciones optimizadas para este tipo de arreglos. (Similar a {\tt dataframes} y {\tt tibbles} en {\tt R}.
+			
+			\item \href{http://www.scipy.org}{{\tt Scipy}}: colección de subpaquetes y funciones que se usan comunmente en ciencias y en finanzas.
+			
+			\item {\tt matplotlib}: funciones para gráficas y visualización en 2D y 3D (similar a {\tt ggplot2} en {\tt R}).  
+			
+			\item \href{http://pandas.pydata.org}{{\tt pandas}}: Amplía las capacidades de gestión de {\tt Numpy} para el análisis de series de tiempo y datos tabulares.			
+			
+			\item \href{http://scikit-learn.org}{{\tt scikit-learn}}: Paquetes para ML: estimación, clasificación, conglomerados.
+			
+			\item \href{http://www.pytables.org}{{\tt PyTables}}: Almacenamiento de datos con entradas/salidas optimizadas. 
+			
+			\item \href{http://statsmodels.org}{{\tt statsmodels}}: Paquete de métodos y modelos estadísticos. Incluye modelos lineales, modelos de series de tiempo, modelos no paramétricos, visualización de los resultados de modelos estadísticos. 			
+		\end{itemize}
+	\end{itemize}
+	\begin{itemize}
+		\item {\tt Ipython}: Una versión mejorada del intérprete que permite tener una versión interactiva. Esta versión se usa en {\tt spyder} que es un IDE bastante amigable, similar a {\tt RStudio}
+		\begin{center}
+			\includegraphics[height=3cm]{ipython}
+		\end{center}
+	\end{itemize}
 \end{frame}
 
+
+\section{Ejemplos de aplicación}
+
+\begin{frame}[fragile]{Ejemplo 1}
+	El siguiente ejemplo calcula el valor de un call europeo vía Montecarlo.
+<<engine='python', size = "tiny">>=
+import math
+import numpy as np
+
+S0 =100     # Valor inicial del stock
+K = 105     # precio strike
+T = 1.0     # plazo
+r = 0.05    # tasa libre de riesgo
+sigma = 0.2 # Volatilidad
+
+I = 100000  # número de simulaciones
+np.random.seed(1000)  # semilla aleatoria
+z = np.random.standard_normal(I)  # variables aleatorias normales estándar
+ST = S0 * np.exp((r - sigma**2/2) * T + sigma * math.sqrt(T)*z)  # Browniano geométrico
+hT = np.maximum(ST-K, 0)                                         # función a evaluar
+C0 = math.exp(-r*T)*np.mean(hT)                                  # Valuación de la opción
+print('Valor de la opción call europea: {:5.4f}.'.format(C0))    # imprime resultado
+@
+
+El código anterior se puede escribir a un archivo de texto y ejecutarse como un script.
+\begin{verbatim}
+jvega@xenia:~/Dropbox/python_finanzas/scripts$ python3 callEur.py 
+Valor de la opción call europea: 8.0191.
+\end{verbatim} 
+\end{frame}
+
+\begin{frame}[fragile,allowframebreaks]{Ejemplo 2}
+
+Los datos del libro de Hilpisch pueden obtenerse de su \href{https://github.com/yhilpisch/py4fi2nd/tree/mastplter/source}{sitio de Github}.	
+<<engine= 'python', size = "tiny">>=
+import numpy as np             # Importa Numpy y pandas
+import pandas as pd
+from pylab import plt, mpl
+
+# lee datos ejemplo provistos por Hilpisch 
+data = pd.read_csv('../data/tr_eikon_eod_data.csv', index_col=0, parse_dates=True)
+data = pd.DataFrame(data['.SPX'])
+data.dropna(inplace=True)
+data.info()                    # características de los datos 
+
+data['rets'] = np.log(data/data.shift(1))        # calcula los log-rendimientos
+data['vola'] = data['rets'].rolling(252).std()*np.sqrt(252)   # calcula la volatilidad anualizada móvil
+
+# Grafica las series de tiempo.
+plt.style.use('seaborn')   # estilo de la gráfica
+data[['.SPX','vola']].plot(subplots = True, figsize = (10,4))
+plt.show()                 # para que se muestren los resultados en la presentación.
+
+@
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]{Ejemplo 3: Desempeño computacional de \python.}
+<<"Perf", engine='python', size = "tiny">>=	
+import math
+import timeit
+
+print(timeit.timeit(stmt='loops = 3000000; a  = range(1, loops); def f(x): return 3 * math.log(x) + math.cos(x) ** 2; r =[f(x) for x in a]' ))
+@
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]{Ejemplo 4: Aplicacion de ML y AI}
+<<"AI-1", engine='python', size = "tiny">>=
+import numpy as np
+import pandas as pd
+
+data = pd.read_csv('../data/tr_eikon_eod_data.csv', index_col=0, parse_dates=True)
+data = pd.DataFrame(data['AAPL.O'])    # Selecciona Stocks de Apple
+data['Rendimientos'] = np.log(data/data.shift()) # Calcula log-rendimientos de toda la serie
+data.dropna(inplace = True)
+
+lags = 6
+
+cols = []
+for lag in range(1, lags+1):
+	col = 'lag_{}'.format(lag)
+	# Genera columnas de un dataframe con rezagos direccionales
+	data[col] = np.sign(data['Rendimientos'].shift(lag))
+	cols.append(col)
+data.dropna(inplace=True)
+@
+
+
+<<"AI-2", engine='python', size = "tiny">>=
+from sklearn.svm import SVC
+
+model = SVC(gamma = 'auto')
+model.fit(data[cols], np.sign(data['Rendimientos']))
+SVC(C = 1.0, cache_size = 200, class_weight=None, coef0 = 0.0,
+    decision_function_shape = 'ovr', degree = 3, gamma = 'auto', kernel = 'rbf',
+    max_iter = -1, probability = False, random_state = None, shrinking = True,
+    tol = 0.001, verbose = False)
+    
+data['Prediction'] = model.predict(data[cols])
+data['Estrategia'] = data['Prediction']*data['Rendimientos']
+data[['Rendimientos', 'Estrategia']].cumsum().apply(np.exp).plot(figsize=(10,5))
+plt.show() 
+@
+
+\end{frame}
 \end{document}

@@ -1,0 +1,9 @@
+# -*- coding: utf-8 -*-
+import math
+
+loops = 3000000
+a  = range(1, loops)
+def f(x): 
+    return 3 * math.log(x) + math.cos(x) ** 2
+
+%timeit r =[f(x) for x in a]
