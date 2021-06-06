@@ -394,12 +394,9 @@ plt.show()                 # para que se muestren los resultados en la presentac
 \end{frame}
 
 \begin{frame}[fragile, allowframebreaks]{Ejemplo 3: Desempeño computacional de \python.}
-<<"Perf", engine='python', size = "tiny">>=	
-import math
-import timeit
-
-print(timeit.timeit(stmt='loops = 3000000; a  = range(1, loops); def f(x): return 3 * math.log(x) + math.cos(x) ** 2; r =[f(x) for x in a]' ))
-@
+\begin{center}
+\includegraphics[height=0.9\textheight]{jupyterAI1}
+\end{center}
 \end{frame}
 
 \begin{frame}[fragile, allowframebreaks]{Ejemplo 4: Aplicacion de ML y AI}
