@@ -109,6 +109,9 @@ knit_hooks$set(rgl=function(before,options,envir){
  \begin{itemize}
  	\item \python\ es un lenguaje de programación de alto nivel creado a principios de los 90's por el holandés Guido van Rossum. El nombre del programa viene de la serie de TV de la BBC \emph{Monty Python's Flying Circus}. 
  	
+ 	\begin{center}
+ 		\includegraphics[width=6cm]{montypython}
+ 	\end{center}
  	\item Cuenta con las siguientes características:
  	\begin{itemize}
  		\item Es un intérprete, con algunas partes compiladas: {\tt CPython} compila el código fuente  de \python\ a bytecode y en ese momento interpreta ese bytecode, ejecutándose sobre la marcha.
@@ -118,7 +121,7 @@ knit_hooks$set(rgl=function(before,options,envir){
  		\item \python\ se puede usar en combinación con otros lenguajes e interactuar para ampliar las capacidades computacionales. 
  	\end{itemize}
  
- 	\item Hubo dos versiones de \python que se estuvieron desarrollando durante un tiempo la versión 2.6 se lanzó en paralelo con la versión 3.0 y eran incompatibles. Sin embargo, las versiones 2 fueron ``descontinuadas'' a partir del 20 de abril de 2020.
+ 	\item Hubo dos versiones de \python\ que se estuvieron desarrollando durante un tiempo la versión 2.6 se lanzó en paralelo con la versión 3.0 y eran incompatibles. Sin embargo, las versiones 2 fueron ``descontinuadas'' a partir del 20 de abril de 2020.
  
  	\item La versión actual de \python\ es la versión 3.8.8 (Abril 2021). La familia 3 se desarrolló para corregir errores de diseño fundamentales en el lenguaje y que no podían tener compatibilidad inversa con la familia 2.  
  \end{itemize}
@@ -371,7 +374,7 @@ Valor de la opción call europea: 8.0191.
 \begin{frame}[fragile,allowframebreaks]{Ejemplo 2}
 
 Los datos del libro de Hilpisch pueden obtenerse de su \href{https://github.com/yhilpisch/py4fi2nd/tree/mastplter/source}{sitio de Github}.	
-<<engine= 'python', size = "tiny">>=
+<<engine= 'python', size = "tiny", out.height="6cm">>=
 import numpy as np             # Importa Numpy y pandas
 import pandas as pd
 from pylab import plt, mpl
@@ -389,7 +392,6 @@ data['vola'] = data['rets'].rolling(252).std()*np.sqrt(252)   # calcula la volat
 plt.style.use('seaborn')   # estilo de la gráfica
 data[['.SPX','vola']].plot(subplots = True, figsize = (10,4))
 plt.show()                 # para que se muestren los resultados en la presentación.
-
 @
 \end{frame}
 
