@@ -1,7 +1,7 @@
 %Para poder compilar este archivo en knitr, tengo que abrirlo en UTF8!
 %API QUANDL : jBysYDAFzV-CwWy6zup_
 \PassOptionsToPackage{unicode,bookmarks=true}{hyperref} 
-\documentclass[9pt,aspectratio=169]{beamer} %handout para quitar las pausas
+\documentclass[10pt,aspectratio=169]{beamer} %handout para quitar las pausas
 \usepackage{mymacrosbeamer}
 \usepackage{graphicx}
 \usepackage{beamerthemesplit}
@@ -33,10 +33,10 @@
 
 \usepackage{fontspec}   % Usar con lualatex
 %\usepackage[utf8]{inputenc}   % Usar con pdflatex
-\setmainfont[Path=/usr/share/fonts/truetype/dejavu/,
-BoldItalicFont=DejaVuSans-BoldOblique.ttf,
-BoldFont      =DejaVuSans-Bold.ttf,
-ItalicFont    =DejaVuSans-Oblique.ttf]{DejavuSans.ttf}
+\setmainfont[Path=/usr/share/fonts/truetype/calibri/,
+BoldItalicFont=calibriz.ttf,
+BoldFont      =calibrib.ttf,
+ItalicFont    =calibrii.ttf]{calibri.ttf}
 %
 
 %tikz section for draws
@@ -70,7 +70,7 @@ ItalicFont    =DejaVuSans-Oblique.ttf]{DejavuSans.ttf}
 
 \title{{\tt Python} para finanzas}
 \subtitle{1. ¿Porqué Python para finanzas?}
-\author{Jorge de la Vega Góngora}
+\author{}
 \institute[GARSF]{Gerencia de Análisis de Riesgos del Sistema Financiero \\ DGEF}
 %\includegraphics[height=2cm,keepaspectratio]{caratulas/Escher1}}
 \date[11/06/21]{Sesión 1} % \today
@@ -105,7 +105,7 @@ knit_hooks$set(rgl=function(before,options,envir){
 
 \subsection{Introducción}
 
-\begin{frame}{¿Qué es \python?}
+\begin{frame}[allowframebreaks]{¿Qué es \python?}
  \begin{itemize}
  	\item \python\ es un lenguaje de programación de alto nivel creado a principios de los 90's por el holandés Guido van Rossum. El nombre del programa viene de la serie de TV de la BBC \emph{Monty Python's Flying Circus}. 
  	
@@ -322,19 +322,27 @@ conda config --set auto_activate_base false
  
 \subsection{Configuración}
 
-\begin{frame}{Bibliotecas o paquetes}
+\begin{frame}[allowframebreaks]{Bibliotecas o paquetes}
 	\begin{itemize}
 		\item El stack científico es uno de los principales atractivos de \python\ actualmente:
 		\begin{itemize}
+		
 			\item \href{http://www.numpy.org}{{\tt Numpy}}: permite manejar arreglos de datos multidimensionales tanto homogéneos como heterogéneos y métodos/funciones optimizadas para este tipo de arreglos. (Similar a {\tt dataframes} y {\tt tibbles} en {\tt R}.
 			
-			\item \href{http://www.scipy.org}{{\tt Scipy}}: colección de subpaquetes y funciones que se usan comunmente en ciencias y en finanzas.
+			\item \href{http://www.scipy.org}{{\tt Scipy}}: colección de subpaquetes y funciones que se usan comunmente en ciencias y en finanzas. Algunos de los paquetes incluídos son los siguientes:
+			\begin{itemize}
+			\item {\tt scipy.integrate}: rutinas de integración numérica
+			\item {\tt scipy.linalg}: rutinas de álgebra lineal y descomposición matricial (complementa a {\tt numpy.linalg}
+			\item {\tt scipy.optimize}: algoritmos para encontrar raíces y optimizar funciones
+			\item {\tt scipy.special}: funciones especiales, como la función gamma
+			\item {\tt scipy.stats}: distribuciones continuas y discretas y pruebas estadísticas
+			\end{itemize}
 			
 			\item {\tt matplotlib}: funciones para gráficas y visualización en 2D y 3D (similar a {\tt ggplot2} en {\tt R}).  
 			
 			\item \href{http://pandas.pydata.org}{{\tt pandas}}: Amplía las capacidades de gestión de {\tt Numpy} para el análisis de series de tiempo y datos tabulares.			
 			
-			\item \href{http://scikit-learn.org}{{\tt scikit-learn}}: Paquetes para ML: estimación, clasificación, conglomerados.
+			\item \href{http://scikit-learn.org}{{\tt scikit-learn}}: Paquetes para ML: estimación, clasificación, conglomerados, reducción de dimensión y regresión.
 			
 			\item \href{http://www.pytables.org}{{\tt PyTables}}: Almacenamiento de datos con entradas/salidas optimizadas. 
 			
@@ -411,7 +419,16 @@ plt.show()                 # para que se muestren los resultados en la presentac
 \end{frame}
 
 \begin{frame}[fragile, allowframebreaks]{Ejemplo 4: Aplicacion de ML y AI}
+
+De acuerdo a Hilpisch, {\tt python} es considerado uno de los programas que más se utilizan para aplicar métodos de IA y en particular de ML y DL.
+
+El siguiente ejemplo muestra cómo usar un algoritmo de clasificación basado en SVM para predecir la dirección de movimientos de precios de mercado futuros y basar un algortimo de estrategia de inversión en esas predicciones. 
+  
 <<"AI-1", engine='python', size = "tiny">>=
+
+# Este código prepara la importación de datos y genera los datos de log-rendimientos
+# rezagados direccionales
+
 import numpy as np
 import pandas as pd
 
@@ -425,27 +442,34 @@ lags = 6
 cols = []
 for lag in range(1, lags+1):
 	col = 'lag_{}'.format(lag)
-	# Genera columnas de un dataframe con rezagos direccionales
+	# Genera columnas de un dataframe con la dirección 
+	# de los rezagos de los rendimientos (+1 o -1)
 	data[col] = np.sign(data['Rendimientos'].shift(lag))
 	cols.append(col)
 data.dropna(inplace=True)
 @
 
+En la siguiente parte del código, se genera una instancia de un modelo SVM, se ajusta el modelo y se lleva a cabo la predicción.
 
 <<"AI-2", engine='python', size = "tiny">>=
 from sklearn.svm import SVC
 
-model = SVC(gamma = 'auto')
-model.fit(data[cols], np.sign(data['Rendimientos']))
-SVC(C = 1.0, cache_size = 200, class_weight=None, coef0 = 0.0,
-    decision_function_shape = 'ovr', degree = 3, gamma = 'auto', kernel = 'rbf',
-    max_iter = -1, probability = False, random_state = None, shrinking = True,
-    tol = 0.001, verbose = False)
-    
-data['Prediction'] = model.predict(data[cols])
+model = SVC(gamma = 'auto') # Crea una instancia del modelo
+
+model.fit(data[cols], np.sign(data['Rendimientos']))  # Ajusta el modelo, dadas las características y los datos 
+
+# Usa el modelo ajustado para crear las predicciones 
+# que son las posiciones de la estrategia de trading en el mismo tiempo.
+
+data['Prediction'] = model.predict(data[cols]) 
+
+# Calcula los log-renidmientos de la estrategia  dados los valores de predicción
+# y los log-rendimientos benchmark
+
 data['Estrategia'] = data['Prediction']*data['Rendimientos']
 data[['Rendimientos', 'Estrategia']].cumsum().apply(np.exp).plot(figsize=(10,5))
-plt.show() 
+
+plt.show() # Gráficas del desempeño del modelo y de la inversión benchmark
 @
 
 \end{frame}
