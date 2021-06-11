@@ -200,7 +200,7 @@ Las opciones de instalación consideradas son las siguientes:
 	 Nivel de expertise:\textcolor{olive}{{\bf bajo}}.
 \end{itemize}
 
-Adicionalmente, hay varios IDEs para trabajar de manera interactiva con \python: {\tt Ipython} + editor de texto, {\tt Jupyter}, {\tt Spyder}, {\tt PyDev}, {\tt Atom}, etc.
+Adicionalmente, hay varios IDEs para trabajar de manera interactiva con \python: {\tt Ipython} + editor de texto, {\tt Jupyter}, {\tt Spyder}, {\tt PyDev}, {\tt Atom}, {\tt PyCharm}, etc.
 
 Yo preferí instalar {\tt Anaconda},  y prefiero {\tt Spyder} y {\tt Jupyter} como IDEs.
 \end{frame}
@@ -276,26 +276,35 @@ Hilpisch muestra como instalar Miniconda en un contenedor de docker. En lo perso
 			\item Para hacer esta presentación, usé el paquete {\tt reticulate} de \R. El paquete creó un ambiente separado llamado {\tt r-reticulate}
 			\item Adicionalmente, tuve que crear un ambiente {\tt base2}, por problemas de instalación con el ambiente {\tt base} que se creó en la instalación original. 
 		\end{itemize} 
-	    \item Para crear un ambiente virtual de con nombre tuambiente:
+	    \item Para crear un ambiente virtual de \python\ con nombre {\tt tuambiente}:
+	    
 \begin{verbatim}
 conda create -n tuambiente python=x.x anaconda
-\end{verbatim}   
-         El comando anterior instalará la versión de \python\ indicada y todos los paqetes anaconda asociados en el directorio en {\tt tu\_anaconda3\_dir/env/tuambiente}. Por ejemplo en mi caso:
+\end{verbatim}
+   
+         El comando anterior instalará la versión de \python\ indicada y todos los paquetes anaconda asociados en el directorio en {\tt tu\_anaconda3\_dir/env/tuambiente}. Por ejemplo en mi caso:
          \begin{center}
          	\includegraphics[height=3cm]{env1}
          \end{center}
      	\item Lista de los ambientes que están disponibles: {\tt conda info -e}
      	
      	\item Para activar o cambiarse a un ambiente virtual usar:
+     	
 \begin{verbatim}
 conda activate tuambiente
 \end{verbatim}
+     	
      	Al activar un ambiente, se modifica el {\tt PATH} y las variables del shell hacia la estructura creada. Esto cambiará el prompt para mostrar el ambiente en el que se está en un momento determinado.
      	\begin{center}
      		\includegraphics[height=3cm]{env2}
      	\end{center} 
-        \item Para terminar una sesión en el ambiente actual: {\tt conda deactivate}. Esto regresará al ambiente base, que también se puede desactivar con {\tt conda config --set auto\_activate\_base false}
-	\end{itemize}
+        \item Para terminar una sesión en el ambiente actual: {\tt conda deactivate}. Esto regresará al ambiente base, que también se puede desactivar con 
+        
+\begin{verbatim}
+conda config --set auto_activate_base false
+\end{verbatim}
+	
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile, allowframebreaks]{Operaciones básicas con {\tt conda}}
