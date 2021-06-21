@@ -390,7 +390,7 @@ Valor de la opción call europea: 8.0191.
 
 \begin{frame}[fragile,allowframebreaks]{Ejemplo 2}
 
-Los datos del libro de Hilpisch pueden obtenerse de su \href{https://github.com/yhilpisch/py4fi2nd/tree/mastplter/source}{sitio de Github}.	
+Los datos del libro de Hilpisch pueden obtenerse de su \href{https://github.com/yhilpisch/py4fi2nd/tree/master/source}{sitio de Github}.	
 <<engine= 'python', size = "tiny", out.height="6cm">>=
 import numpy as np             # Importa Numpy y pandas
 import pandas as pd
